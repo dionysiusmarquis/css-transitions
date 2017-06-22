@@ -1,0 +1,30 @@
+{
+  "name": "css-transitions",
+  "version": "0.1",
+  "description": "Create css transitions, listen css transitions/animations",
+  "repository": "https://github.com/dionysiusmarquis/css-transitions",
+  "author": "Dennis Markgraf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dionysiusmarquis/css-transitions/issues"
+  },
+  "keywords": [
+    "modules",
+    "css",
+    "auto",
+    "polyfill",
+    "transition",
+    "animation",
+    "animate",
+    "listener"
+  ],
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "files": [
+    "README.md"
+  ]
+}
