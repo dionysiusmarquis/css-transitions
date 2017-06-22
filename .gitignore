@@ -1,0 +1,11 @@
+.DS_Store
+/**/.idea/**/*
+node_modules/
+logs/
+dist/
+*.sublime-project
+*.sublime-workspace
+*.cache
+*.sass-cache
+*.log
+*.iml
