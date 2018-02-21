@@ -2,7 +2,6 @@
 /**/.idea/**/*
 node_modules/
 logs/
-dist/
 *.sublime-project
 *.sublime-workspace
 *.cache
