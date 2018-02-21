@@ -63,6 +63,14 @@ function removeTransition (element, property) {
   }
 }
 
+function removeTransitions (element) {
+  let transitionElement = getTransitionElement(element)
+
+  if (transitionElement) {
+    transitionElement.destroy()
+  }
+}
+
 function getTransitionElement (element) {
   return transitionElements.get(element)
 }
@@ -82,9 +90,11 @@ function hasTransition (element, property) {
 export default transition
 export {
   removeTransition,
-  removeTransition as stop,
   removeTransition as remove,
   removeTransition as stopTransition,
+  removeTransitions,
+  removeTransitions as stop,
+  removeTransitions as stopTransitions,
   getTransitionElement,
   getTransitionElement as getElement,
   getTransition,
