@@ -77,7 +77,9 @@ class TransitionElement extends ListenElement {
         this.remove(vendorProperty)
 
         // prepare values
-        value = !isNaN(parseFloat(value)) ? `${value}px` : value
+        if (options.px) {
+          value = !isNaN(parseFloat(value)) ? `${value}px` : value
+        }
 
         let parsedDuration = typeof duration === 'string' ? parse(duration) : duration
         let parsedDelay = options.delay ? typeof options.delay === 'string' ? parse(options.delay) : options.delay : 0
