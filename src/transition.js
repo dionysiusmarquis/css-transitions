@@ -67,6 +67,7 @@ function removeTransitions (element) {
   let transitionElement = getTransitionElement(element)
 
   if (transitionElement) {
+    transitionElements.delete(element)
     transitionElement.destroy()
   }
 }
