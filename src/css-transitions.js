@@ -5,8 +5,10 @@ export default transition
 export {
   remove,
   removeTransition,
+  removeTransitions,
   stop,
   stopTransition,
+  stopTransitions,
   getElement,
   getTransitionElement,
   get,
