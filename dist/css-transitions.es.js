@@ -182,12 +182,13 @@ class ListenElement {
 }
 
 class Transition extends Listener {
-  constructor (property, value, duration = 0, easing = null, delay = 0, callback = null, timeout = null) {
+  constructor (property, value, duration = 0, easing = null, delay = 0, callback = null, clean = false, timeout = null) {
     super(property, callback, timeout);
     this._value = value;
     this._duration = duration;
     this._easing = easing;
     this._delay = delay;
+    this._clean = clean;
     this._string = null;
     this.update();
   }
@@ -211,6 +212,7 @@ class Transition extends Listener {
   get duration () { return this._duration }
   get easing () { return this._easing }
   get delay () { return this._delay }
+  get clean () { return this._clean }
   get string () { return this._string }
 }
 
@@ -244,7 +246,7 @@ class TransitionElement extends ListenElement {
   _applyPolyfills (polyfills, computed, property, value, resolved = null) {
     resolved = resolved || new Values(false, null, value, value);
     if (polyfills) {
-      for (let [, polyfill] of polyfills.entries()) {
+      for (let polyfill of polyfills) {
         let values = polyfill(this._element, computed, property, resolved);
         if (values.polyfilled) {
           resolved = values;
@@ -268,6 +270,7 @@ class TransitionElement extends ListenElement {
       let vendorProperty = vendor(property);
       if (vendorProperty) {
         this.remove(vendorProperty);
+        value = value === null ? '' : value;
         if (options.px) {
           value = !isNaN(parseFloat(value)) ? `${value}px` : value;
         }
@@ -295,6 +298,7 @@ class TransitionElement extends ListenElement {
               ? (_, transition, event) => this._removePolyfill(transition, finish, event, options.callback)
               : options.callback
             ,
+            options.clean,
             null
           );
         if (start) {
@@ -338,6 +342,9 @@ class TransitionElement extends ListenElement {
       }
       if (this._pendingTransitions[transition._vendorProperty]) {
         delete this._pendingTransitions[transition._vendorProperty];
+      }
+      if (transition._clean) {
+        this._element.style[transition._property] = '';
       }
       if (destroy) {
         transition.destroy();
@@ -418,6 +425,7 @@ function removeTransition (element, property) {
 function removeTransitions (element) {
   let transitionElement = getTransitionElement(element);
   if (transitionElement) {
+    transitionElements.delete(element);
     transitionElement.destroy();
   }
 }
@@ -505,4 +513,4 @@ function hasListener (element, property, listener) {
   }
 }
 
-export { listen, removeTransition as remove, removeTransition, removeTransitions as stop, removeTransition as stopTransition, getTransitionElement as getElement, getTransitionElement, getTransition as get, getTransition, hasTransition as has, hasTransition, TransitionElement, Transition, vendor, removeListener, getListenerElement, getListener, getListener as getListeners, hasListener, ListenElement, Listener };export default transition$1;
+export { listen, removeTransition as remove, removeTransition, removeTransitions, removeTransitions as stop, removeTransition as stopTransition, removeTransitions as stopTransitions, getTransitionElement as getElement, getTransitionElement, getTransition as get, getTransition, hasTransition as has, hasTransition, TransitionElement, Transition, vendor, removeListener, getListenerElement, getListener, getListener as getListeners, hasListener, ListenElement, Listener };export default transition$1;

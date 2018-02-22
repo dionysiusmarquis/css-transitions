@@ -212,11 +212,12 @@ prototypeAccessors.listeners.get = function () { return this._listeners };
 Object.defineProperties( ListenElement.prototype, prototypeAccessors );
 
 var Transition = (function (Listener$$1) {
-  function Transition (property, value, duration, easing, delay, callback, timeout) {
+  function Transition (property, value, duration, easing, delay, callback, clean, timeout) {
     if ( duration === void 0 ) duration = 0;
     if ( easing === void 0 ) easing = null;
     if ( delay === void 0 ) delay = 0;
     if ( callback === void 0 ) callback = null;
+    if ( clean === void 0 ) clean = false;
     if ( timeout === void 0 ) timeout = null;
 
     Listener$$1.call(this, property, callback, timeout);
@@ -224,6 +225,7 @@ var Transition = (function (Listener$$1) {
     this._duration = duration;
     this._easing = easing;
     this._delay = delay;
+    this._clean = clean;
     this._string = null;
     this.update();
   }
@@ -232,7 +234,7 @@ var Transition = (function (Listener$$1) {
   Transition.prototype = Object.create( Listener$$1 && Listener$$1.prototype );
   Transition.prototype.constructor = Transition;
 
-  var prototypeAccessors = { value: {},duration: {},easing: {},delay: {},string: {} };
+  var prototypeAccessors = { value: {},duration: {},easing: {},delay: {},clean: {},string: {} };
   Transition.prototype.update = function update () {
     var duration = typeof this._duration === 'string' ? this._duration : (this._duration / 1000) + 's';
     var delay = this._delay ? typeof this._delay === 'string' ? this._delay : (this._delay / 1000) + 's' : null;
@@ -253,6 +255,7 @@ var Transition = (function (Listener$$1) {
   prototypeAccessors.duration.get = function () { return this._duration };
   prototypeAccessors.easing.get = function () { return this._easing };
   prototypeAccessors.delay.get = function () { return this._delay };
+  prototypeAccessors.clean.get = function () { return this._clean };
   prototypeAccessors.string.get = function () { return this._string };
 
   Object.defineProperties( Transition.prototype, prototypeAccessors );
@@ -301,7 +304,7 @@ var TransitionElement = (function (ListenElement$$1) {
 
     resolved = resolved || new Values(false, null, value, value);
     if (polyfills) {
-      for (var [, polyfill] of polyfills.entries()) {
+      for (var polyfill of polyfills) {
         var values = polyfill(this$1._element, computed, property, resolved);
         if (values.polyfilled) {
           resolved = values;
@@ -328,6 +331,7 @@ var TransitionElement = (function (ListenElement$$1) {
       var vendorProperty = vendor(property);
       if (vendorProperty) {
         this$1.remove(vendorProperty);
+        value = value === null ? '' : value;
         if (options.px) {
           value = !isNaN(parseFloat(value)) ? (value + "px") : value;
         }
@@ -359,6 +363,7 @@ var TransitionElement = (function (ListenElement$$1) {
               ? function (_, transition, event) { return this$1._removePolyfill(transition, finish, event, options.callback); }
               : options.callback
             ,
+            options.clean,
             null
           );
         if (start) {
@@ -406,6 +411,9 @@ var TransitionElement = (function (ListenElement$$1) {
       }
       if (this._pendingTransitions[transition._vendorProperty]) {
         delete this._pendingTransitions[transition._vendorProperty];
+      }
+      if (transition._clean) {
+        this._element.style[transition._property] = '';
       }
       if (destroy) {
         transition.destroy();
@@ -495,6 +503,7 @@ function removeTransition (element, property) {
 function removeTransitions (element) {
   var transitionElement = getTransitionElement(element);
   if (transitionElement) {
+    transitionElements.delete(element);
     transitionElement.destroy();
   }
 }
@@ -586,8 +595,10 @@ exports['default'] = transition$1;
 exports.listen = listen;
 exports.remove = removeTransition;
 exports.removeTransition = removeTransition;
+exports.removeTransitions = removeTransitions;
 exports.stop = removeTransitions;
 exports.stopTransition = removeTransition;
+exports.stopTransitions = removeTransitions;
 exports.getElement = getTransitionElement;
 exports.getTransitionElement = getTransitionElement;
 exports.get = getTransition;
