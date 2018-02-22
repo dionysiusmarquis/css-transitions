@@ -2,12 +2,13 @@ import Listener from './listener'
 import vendor from './../utils/property'
 
 class Transition extends Listener {
-  constructor (property, value, duration = 0, easing = null, delay = 0, callback = null, timeout = null) {
+  constructor (property, value, duration = 0, easing = null, delay = 0, callback = null, clean = false, timeout = null) {
     super(property, callback, timeout)
     this._value = value
     this._duration = duration
     this._easing = easing
     this._delay = delay
+    this._clean = clean
     this._string = null
 
     this.update()
@@ -40,6 +41,8 @@ class Transition extends Listener {
   get easing () { return this._easing }
 
   get delay () { return this._delay }
+
+  get clean () { return this._clean }
 
   get string () { return this._string }
 }

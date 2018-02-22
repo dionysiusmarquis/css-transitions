@@ -112,6 +112,7 @@ class TransitionElement extends ListenElement {
               ? (_, transition, event) => this._removePolyfill(transition, finish, event, options.callback)
               : options.callback
             ,
+            options.clean,
             null
           )
 
@@ -165,6 +166,10 @@ class TransitionElement extends ListenElement {
 
       if (this._pendingTransitions[transition._vendorProperty]) {
         delete this._pendingTransitions[transition._vendorProperty]
+      }
+
+      if (transition._clean) {
+        this._element.style[transition._property] = ''
       }
 
       if (destroy) {
