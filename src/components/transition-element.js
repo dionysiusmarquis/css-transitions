@@ -43,7 +43,7 @@ class TransitionElement extends ListenElement {
     resolved = resolved || new Values(false, null, value, value)
 
     if (polyfills) {
-      for (let [, polyfill] of polyfills.entries()) {
+      for (let polyfill of polyfills) {
         let values = polyfill(this._element, computed, property, resolved)
         if (values.polyfilled) {
           resolved = values
