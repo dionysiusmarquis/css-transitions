@@ -77,6 +77,7 @@ class TransitionElement extends ListenElement {
         this.remove(vendorProperty)
 
         // prepare values
+        value = value === null ? '' : value
         if (options.px) {
           value = !isNaN(parseFloat(value)) ? `${value}px` : value
         }
